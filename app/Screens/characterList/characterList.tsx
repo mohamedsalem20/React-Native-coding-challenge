@@ -13,6 +13,8 @@ import {
 const CharacterList = () => {
   const [namequeryHolder, setnamequeryHolder] = useState('');
 
+  const [isLoading, setisLoading] = useState(false);
+
   const resultsSimulation = [
     {
       id: 361,
@@ -74,13 +76,54 @@ const CharacterList = () => {
 
   return (
     <View>
+      {/* Search box area  */}
       <TextInput
         value={namequeryHolder}
         style={styles.searchBar}
         placeholder={'Search by name'}
         onChangeText={searchForUserByName}
       />
-
+      {/* Loading Case */}
+      {isLoading ? (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            padding: 10,
+            backgroundColor: '#27ae60',
+          }}>
+          <ActivityIndicator size={'small'} color={'white'} />
+          <Text
+            style={{
+              fontWeight: 'bold',
+              color: '#2c3e50',
+              marginHorizontal: 10,
+            }}>
+            Fetching data ...
+          </Text>
+        </View>
+      ) : null}
+      {/* Empty state Case  */}
+      {!isLoading && resultsSimulation.length == 0 ? (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#bdc3c7',
+            height: '100%',
+            margin: 10,
+          }}>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              color: '#2c3e50',
+              marginHorizontal: 10,
+            }}>
+            No Charachter found !
+          </Text>
+        </View>
+      ) : null}
+      {/* List of charachters  */}
       <FlatList
         data={resultsSimulation}
         renderItem={({item}) => {
