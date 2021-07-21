@@ -10,28 +10,63 @@ import {
   View,
 } from 'react-native';
 
+import {useQuery, gql} from '@apollo/client';
+
 const CharacterList = () => {
+  const characters = gql`
+    query {
+      characters {
+        results {
+          id
+          name
+          image
+        }
+        info {
+          next
+          pages
+          count
+        }
+      }
+    }
+  `;
+  // >> TESTING AREA
+  function FetchCharachters() {
+    const {loading, error, data} = useQuery(characters);
+
+    if (loading)
+      return (
+        <View style={styles.LoadingHolder}>
+          <ActivityIndicator size={'small'} color={'white'} />
+          <Text style={styles.LoadingMsg}>Fetching data ...</Text>
+        </View>
+      );
+    if (error) return <Text>Error :(</Text>;
+
+    // EmptyList to be implimented
+    //     <View style={styles.EmptyList}>
+    //     <Text style={styles.EmptyCaseText}>No Charachter found !</Text>
+    //   </View>
+
+    return (
+      <View>
+        {/* List of charachters  */}
+        <FlatList
+          data={data.characters.results}
+          renderItem={({item}) => {
+            return (
+              <CharachterCard
+                image={item.image}
+                id={item.id}
+                name={item.name}
+              />
+            );
+          }}
+        />
+      </View>
+    );
+  }
+  // END OF TEST
   const [namequeryHolder, setnamequeryHolder] = useState('');
-
-  const [isLoading, setisLoading] = useState(false);
-
-  const resultsSimulation = [
-    {
-      id: 361,
-      name: 'Toxic Rick',
-      image: 'https://rickandmortyapi.com/api/character/avatar/361.jpeg',
-    },
-    {
-      id: 2,
-      name: 'Morty Smith',
-      image: 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
-    },
-    {
-      id: 183,
-      name: 'Johnny Depp',
-      image: 'https://rickandmortyapi.com/api/character/avatar/183.jpeg',
-    },
-  ];
 
   // on selct Charachter
   function onSelectCharachter(id: number) {
@@ -83,28 +118,7 @@ const CharacterList = () => {
         placeholder={'Search by name'}
         onChangeText={searchForUserByName}
       />
-      {/* Loading Case */}
-      {isLoading ? (
-        <View style={styles.LoadingHolder}>
-          <ActivityIndicator size={'small'} color={'white'} />
-          <Text style={styles.LoadingMsg}>Fetching data ...</Text>
-        </View>
-      ) : null}
-      {/* Empty state Case  */}
-      {!isLoading && resultsSimulation.length == 0 ? (
-        <View style={styles.EmptyList}>
-          <Text style={styles.EmptyCaseText}>No Charachter found !</Text>
-        </View>
-      ) : null}
-      {/* List of charachters  */}
-      <FlatList
-        data={resultsSimulation}
-        renderItem={({item}) => {
-          return (
-            <CharachterCard image={item.image} id={item.id} name={item.name} />
-          );
-        }}
-      />
+      <FetchCharachters />
     </View>
   );
 };
