@@ -1,15 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 
 const CharacterList = () => {
+  const [namequeryHolder, setnamequeryHolder] = useState('');
+
   const resultsSimulation = [
     {
       id: 361,
@@ -28,9 +31,15 @@ const CharacterList = () => {
     },
   ];
 
-  // on selectect Charachter
+  // on selct Charachter
   function onSelectCharachter(id: number) {
     console.log('selectedCharacter id :' + id);
+  }
+
+  // search for character by name (on the fly)
+  function searchForUserByName(input: string) {
+    setnamequeryHolder(input);
+    console.log('https://rickandmortyapi.com/api/character/?name=' + input);
   }
 
   // list Item
@@ -65,6 +74,13 @@ const CharacterList = () => {
 
   return (
     <View>
+      <TextInput
+        value={namequeryHolder}
+        style={styles.searchBar}
+        placeholder={'Search by name'}
+        onChangeText={searchForUserByName}
+      />
+
       <FlatList
         data={resultsSimulation}
         renderItem={({item}) => {
@@ -109,6 +125,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     marginRight: 10,
+  },
+  searchBar: {
+    borderWidth: 0.5,
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
   },
 });
 
