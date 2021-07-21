@@ -13,7 +13,7 @@ import {
 import {useQuery, gql} from '@apollo/client';
 
 const CharacterList = () => {
-  const characters = gql`
+  const CHARACTERS_QUERY = gql`
     query {
       characters {
         results {
@@ -30,7 +30,12 @@ const CharacterList = () => {
     }
   `;
   function FetchCharachters() {
-    const {loading, error, data} = useQuery(characters);
+    const {loading, error, data, fetchMore} = useQuery(CHARACTERS_QUERY, {
+      variables: {
+        offset: 0,
+        limit: 10,
+      },
+    });
 
     if (loading)
       return (
@@ -55,8 +60,15 @@ const CharacterList = () => {
       <View>
         {/* List of charachters  */}
         <FlatList
-          style={{
-            margin: 5,
+          onEndReachedThreshold={0.01}
+          onEndReached={info => {
+            //  loadMoreResults(info);
+            console.log('fetching more ...', data?.characters?.results.length);
+            fetchMore({
+              variables: {
+                offset: data?.characters?.results.length,
+              },
+            });
           }}
           data={data.characters.results}
           renderItem={({item}) => {
