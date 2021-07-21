@@ -11,8 +11,10 @@ import {
 } from 'react-native';
 
 import {useQuery, gql} from '@apollo/client';
+import {useNavigation} from '@react-navigation/native';
 
 const CharacterList = () => {
+  const navigation = useNavigation();
   const CHARACTERS_QUERY = gql`
     query {
       characters {
@@ -88,6 +90,8 @@ const CharacterList = () => {
 
   // on selct Charachter
   function onSelectCharachter(id: number) {
+    navigation.push('CharachterDetails', id);
+
     console.log('selectedCharacter id :' + id);
   }
 
