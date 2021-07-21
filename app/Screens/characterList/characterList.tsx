@@ -89,10 +89,18 @@ const CharacterList = () => {
   const [namequeryHolder, setnamequeryHolder] = useState('');
 
   // on selct Charachter
-  function onSelectCharachter(id: number) {
-    navigation.push('CharachterDetails', id);
+  function onSelectCharachter({
+    image,
+    name,
+    id,
+  }: {
+    image: string;
+    name: string;
+    id: number;
+  }) {
+    navigation.push('CharachterDetails', id, name, image);
 
-    console.log('selectedCharacter id :' + id);
+    console.log('selectedCharacter id :' + name);
   }
 
   // search for character by name (on the fly)
@@ -113,7 +121,7 @@ const CharacterList = () => {
     return (
       <TouchableOpacity
         onPress={() => {
-          onSelectCharachter(id);
+          onSelectCharachter({image, name, id});
         }}>
         <View style={styles.ListItemHolder}>
           <View style={styles.pictureHolder}>
