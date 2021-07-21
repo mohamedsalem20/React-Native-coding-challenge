@@ -85,42 +85,15 @@ const CharacterList = () => {
       />
       {/* Loading Case */}
       {isLoading ? (
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            padding: 10,
-            backgroundColor: '#27ae60',
-          }}>
+        <View style={styles.LoadingHolder}>
           <ActivityIndicator size={'small'} color={'white'} />
-          <Text
-            style={{
-              fontWeight: 'bold',
-              color: '#2c3e50',
-              marginHorizontal: 10,
-            }}>
-            Fetching data ...
-          </Text>
+          <Text style={styles.LoadingMsg}>Fetching data ...</Text>
         </View>
       ) : null}
       {/* Empty state Case  */}
       {!isLoading && resultsSimulation.length == 0 ? (
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#bdc3c7',
-            height: '100%',
-            margin: 10,
-          }}>
-          <Text
-            style={{
-              fontWeight: 'bold',
-              color: '#2c3e50',
-              marginHorizontal: 10,
-            }}>
-            No Charachter found !
-          </Text>
+        <View style={styles.EmptyList}>
+          <Text style={styles.EmptyCaseText}>No Charachter found !</Text>
         </View>
       ) : null}
       {/* List of charachters  */}
@@ -174,6 +147,29 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     margin: 10,
+  },
+  LoadingHolder: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 10,
+    backgroundColor: '#27ae60',
+  },
+  LoadingMsg: {
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginHorizontal: 10,
+  },
+  EmptyList: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#bdc3c7',
+    height: '100%',
+    margin: 10,
+  },
+  EmptyCaseText: {
+    fontWeight: 'bold',
+    color: '#2c3e50',
+    marginHorizontal: 10,
   },
 });
 
