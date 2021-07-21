@@ -29,7 +29,6 @@ const CharacterList = () => {
       }
     }
   `;
-  // >> TESTING AREA
   function FetchCharachters() {
     const {loading, error, data} = useQuery(characters);
 
@@ -43,14 +42,22 @@ const CharacterList = () => {
     if (error) return <Text>Error :(</Text>;
 
     // EmptyList to be implimented
-    //     <View style={styles.EmptyList}>
-    //     <Text style={styles.EmptyCaseText}>No Charachter found !</Text>
-    //   </View>
+
+    if (data?.characters?.results.length <= 0) {
+      return (
+        <View style={styles.EmptyList}>
+          <Text style={styles.EmptyCaseText}>No Charachter found !</Text>
+        </View>
+      );
+    }
 
     return (
       <View>
         {/* List of charachters  */}
         <FlatList
+          style={{
+            margin: 5,
+          }}
           data={data.characters.results}
           renderItem={({item}) => {
             return (
@@ -65,7 +72,6 @@ const CharacterList = () => {
       </View>
     );
   }
-  // END OF TEST
   const [namequeryHolder, setnamequeryHolder] = useState('');
 
   // on selct Charachter
@@ -160,7 +166,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 10,
     padding: 10,
-    margin: 10,
+    // margin: 10,
   },
   LoadingHolder: {
     flexDirection: 'row',
