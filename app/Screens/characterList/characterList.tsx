@@ -22,6 +22,8 @@ const CharacterList = () => {
           id
           name
           image
+          species
+          gender
         }
         info {
           next
@@ -79,6 +81,8 @@ const CharacterList = () => {
                 image={item.image}
                 id={item.id}
                 name={item.name}
+                //       species
+                // gender
               />
             );
           }}
@@ -98,7 +102,7 @@ const CharacterList = () => {
     name: string;
     id: number;
   }) {
-    navigation.push('CharachterDetails', id, name, image);
+    navigation.push('CharachterDetails', {id, name, image});
 
     console.log('selectedCharacter id :' + name);
   }
