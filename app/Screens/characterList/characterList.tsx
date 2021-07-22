@@ -12,13 +12,15 @@ import {
 
 import {useQuery, gql} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
+import {Button} from 'react-native';
 
 const CharacterList = () => {
   const [namequeryHolder, setnamequeryHolder] = useState('');
+  const [nextPage, setnextPage] = useState(0);
 
   const CHARACTERS_QUERY = gql`
     query {
-      characters(filter: {name: "${namequeryHolder}"}) {
+      characters(filter: {name: "${namequeryHolder}"}, page : ${nextPage}) {
         results {
           id
           name
@@ -32,29 +34,79 @@ const CharacterList = () => {
         }
         info {
           next
-          pages
-          count
         }
       }
     }
   `;
+
+  const CHARACTERS_QUERY_FILTER = gql`
+  query {
+    characters(filter: {name: "${namequeryHolder}"}) {
+      results {
+        id
+        name
+        image
+        species
+        gender
+        episode{
+          name
+          air_date
+        }
+      }
+      info {
+        next
+      }
+    }
+  }
+`;
+  const [results, setresults] = useState([]);
+
   const navigation = useNavigation();
 
   function FetchCharachters() {
-    const {loading, error, data, fetchMore} = useQuery(CHARACTERS_QUERY, {
-      variables: {
-        offset: 0,
-        limit: 20,
-      },
-    });
+    const {loading, error, data, fetchMore} = useQuery(
+      namequeryHolder.length > 0 ? CHARACTERS_QUERY_FILTER : CHARACTERS_QUERY,
+    );
 
-    if (loading)
-      return (
-        <View style={styles.LoadingHolder}>
-          <ActivityIndicator size={'small'} color={'white'} />
-          <Text style={styles.LoadingMsg}>Fetching data ...</Text>
-        </View>
-      );
+    function loadMore() {
+      const next = data?.characters.info.next;
+      setnextPage(next);
+
+      fetchMore({
+        query: CHARACTERS_QUERY,
+        updateQuery: (prev, {fetchMoreResult}) => {
+          console.log('fetchMoreResult IDS');
+
+          fetchMoreResult.characters.results.forEach(elm => {
+            console.log(elm.id);
+          });
+
+          console.log('prev IDS');
+
+          prev.characters.results.forEach(elm => {
+            console.log(elm.id);
+          });
+
+          if (!fetchMoreResult) {
+            return prev;
+          }
+          // return Object.assign({}, prev, {
+          //   characters: [...prev.characters, ...fetchMoreResult.characters],
+          // });
+          // console.log(prev);
+          const newReuslt = fetchMoreResult.characters.results;
+          setresults([...results, ...newReuslt]);
+        },
+      });
+    }
+
+    // if (loading)
+    //   return (
+    //     <View style={styles.LoadingHolder}>
+    //       <ActivityIndicator size={'small'} color={'white'} />
+    //       <Text style={styles.LoadingMsg}>Fetching data ...</Text>
+    //     </View>
+    //   );
     if (error) return <Text>Error :(</Text>;
 
     // EmptyList to be implimented
@@ -69,17 +121,15 @@ const CharacterList = () => {
 
     return (
       <View>
+        <Text> {results.length} </Text>
+        <Button title={'load more'} onPress={loadMore} />
         {/* List of charachters  */}
         <FlatList
           keyboardShouldPersistTaps="always"
           onEndReachedThreshold={0.01}
-          onEndReached={() => {
-            console.log('fetching more ...', data?.characters?.results.length);
-          }}
-          data={data.characters.results}
+          onEndReached={loadMore}
+          data={results}
           renderItem={({item}) => {
-            console.log({item});
-
             return (
               <CharachterCard
                 image={item.image}
@@ -144,7 +194,9 @@ const CharacterList = () => {
             />
             <Image source={{uri: image}} style={styles.pictureSize} />
           </View>
+          <Text style={styles.name}>{id}</Text>
           <Text style={styles.name}>{name}</Text>
+
           <Text style={styles.arrow}>{'>'}</Text>
         </View>
       </TouchableOpacity>

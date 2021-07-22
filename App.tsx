@@ -5,14 +5,24 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import CharacterList from './app/Screens/characterList/characterList';
 import CharachterDetails from './app/Screens/charachterDetails/CharachterDetails';
+import {offsetLimitPagination} from '@apollo/client/utilities';
 
 // import StackNavigator from './app/Navigation/StackNavigator';
 
 const App = () => {
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          users: offsetLimitPagination(),
+        },
+      },
+    },
+  });
   // Initialize Apollo Client
   const client = new ApolloClient({
     uri: 'https://rickandmortyapi.com/graphql',
-    cache: new InMemoryCache(),
+    cache: cache,
   });
   const Stack = createStackNavigator();
 
