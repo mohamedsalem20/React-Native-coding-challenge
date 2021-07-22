@@ -14,10 +14,11 @@ import {useQuery, gql} from '@apollo/client';
 import {useNavigation} from '@react-navigation/native';
 
 const CharacterList = () => {
-  const navigation = useNavigation();
+  const [namequeryHolder, setnamequeryHolder] = useState('');
+
   const CHARACTERS_QUERY = gql`
     query {
-      characters {
+      characters(filter: {name: "${namequeryHolder}"}) {
         results {
           id
           name
@@ -33,11 +34,13 @@ const CharacterList = () => {
       }
     }
   `;
+  const navigation = useNavigation();
+
   function FetchCharachters() {
     const {loading, error, data, fetchMore} = useQuery(CHARACTERS_QUERY, {
       variables: {
         offset: 0,
-        limit: 10,
+        limit: 20,
       },
     });
 
@@ -65,14 +68,8 @@ const CharacterList = () => {
         {/* List of charachters  */}
         <FlatList
           onEndReachedThreshold={0.01}
-          onEndReached={info => {
-            //  loadMoreResults(info);
+          onEndReached={() => {
             console.log('fetching more ...', data?.characters?.results.length);
-            fetchMore({
-              variables: {
-                offset: data?.characters?.results.length,
-              },
-            });
           }}
           data={data.characters.results}
           renderItem={({item}) => {
@@ -81,7 +78,7 @@ const CharacterList = () => {
                 image={item.image}
                 id={item.id}
                 name={item.name}
-                //       species
+                // species
                 // gender
               />
             );
@@ -90,7 +87,6 @@ const CharacterList = () => {
       </View>
     );
   }
-  const [namequeryHolder, setnamequeryHolder] = useState('');
 
   // on selct Charachter
   function onSelectCharachter({
