@@ -100,13 +100,13 @@ const CharacterList = () => {
       });
     }
 
-    // if (loading)
-    //   return (
-    //     <View style={styles.LoadingHolder}>
-    //       <ActivityIndicator size={'small'} color={'white'} />
-    //       <Text style={styles.LoadingMsg}>Fetching data ...</Text>
-    //     </View>
-    //   );
+    if (loading)
+      return (
+        <View style={styles.LoadingHolder}>
+          <ActivityIndicator size={'small'} color={'white'} />
+          <Text style={styles.LoadingMsg}>Fetching data ...</Text>
+        </View>
+      );
     if (error) return <Text>Error :(</Text>;
 
     // EmptyList to be implimented
