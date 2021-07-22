@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
   ActivityIndicator,
+  Dimensions,
   FlatList,
   Image,
   StyleSheet,
@@ -121,10 +122,11 @@ const CharacterList = () => {
 
     return (
       <View>
-        <Text> {results.length} </Text>
-        <Button title={'load more'} onPress={loadMore} />
+        {/* <Button title={'load more'} onPress={loadMore} /> */}
         {/* List of charachters  */}
         <FlatList
+          style={{margin: 5}}
+          numColumns={3}
           keyboardShouldPersistTaps="always"
           onEndReachedThreshold={0.01}
           onEndReached={loadMore}
@@ -179,13 +181,15 @@ const CharacterList = () => {
     moreInfo: object;
   };
 
+  const screenWidth = Dimensions.get('window').width;
   const CharachterCard = ({image, name, id, moreInfo}: CharachterCardProps) => {
     return (
       <TouchableOpacity
+        style={{}}
         onPress={() => {
           onSelectCharachter({image, name, id, moreInfo});
         }}>
-        <View style={styles.ListItemHolder}>
+        {/* <View style={styles.ListItemHolder}>
           <View style={styles.pictureHolder}>
             <ActivityIndicator
               size={'small'}
@@ -194,33 +198,87 @@ const CharacterList = () => {
             />
             <Image source={{uri: image}} style={styles.pictureSize} />
           </View>
-          <Text style={styles.name}>{id}</Text>
           <Text style={styles.name}>{name}</Text>
-
-          <Text style={styles.arrow}>{'>'}</Text>
+        </View> */}
+        <View
+          style={{
+            height: screenWidth / 2.5,
+            width: screenWidth / 3.2,
+            marginHorizontal: 4,
+            marginVertical: 20,
+          }}>
+          <Image
+            source={{uri: image}}
+            style={{
+              height: screenWidth / 2.5,
+              width: screenWidth / 3.2,
+              borderRadius: 10,
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+            }}
+            resizeMode={'stretch'}
+          />
+          <Text style={{color: 'white', fontWeight: 'bold'}}>{name}</Text>
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View>
+    <View
+      style={{
+        backgroundColor: '#223762',
+        flex: 1,
+      }}>
       {/* Search box area  */}
-      <View>
+      <View style={{}}>
         <TextInput
           value={namequeryHolder}
-          style={styles.searchBar}
+          style={{
+            backgroundColor: 'white',
+            padding: 10,
+            marginHorizontal: 10,
+            marginTop: 10,
+          }}
           placeholder={'Search by name'}
           onChangeText={searchForUserByName}
         />
+        <Text
+          style={{
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: 20,
+            marginLeft: 10,
+          }}>
+          Rick and Morty ({results.length})
+        </Text>
         {/* Clear search box  */}
         {namequeryHolder.length > 0 ? (
           <TouchableOpacity
             onPress={() => {
               setnamequeryHolder('');
             }}
-            style={styles.clearSearchTextBtn}>
-            <Text style={styles.clearSearchText}>X</Text>
+            style={{
+              position: 'absolute',
+              right: 35,
+              top: 25,
+            }}>
+            <Text
+              style={{
+                backgroundColor: 'red',
+                height: 20,
+                width: 20,
+                borderRadius: 10,
+                textAlign: 'center',
+                color: 'white',
+              }}>
+              X
+            </Text>
           </TouchableOpacity>
         ) : null}
       </View>
@@ -231,24 +289,22 @@ const CharacterList = () => {
 
 const styles = StyleSheet.create({
   ListItemHolder: {
-    flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
     padding: 5,
   },
   pictureHolder: {
     backgroundColor: 'gray',
-    height: 60,
-    width: 60,
+    // height: 60,
+    // width: 60,
     borderRadius: 30,
     margin: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   pictureSize: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
+    height: 150,
+    width: 90,
   },
   name: {
     color: 'black',
@@ -291,18 +347,8 @@ const styles = StyleSheet.create({
     color: '#2c3e50',
     marginHorizontal: 10,
   },
-  clearSearchTextBtn: {
-    position: 'absolute',
-    right: 5,
-    top: 15,
-  },
-  clearSearchText: {
-    backgroundColor: 'red',
-    height: 20,
-    width: 20,
-    borderRadius: 10,
-    textAlign: 'center',
-  },
+  clearSearchTextBtn: {},
+  clearSearchText: {},
 });
 
 export default CharacterList;

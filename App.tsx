@@ -30,7 +30,13 @@ const App = () => {
     <ApolloProvider client={client}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="CharacterList" component={CharacterList} />
+          <Stack.Screen
+            options={{
+              headerShown: false,
+            }}
+            name="CharacterList"
+            component={CharacterList}
+          />
           <Stack.Screen
             name="CharachterDetails"
             component={CharachterDetails}
