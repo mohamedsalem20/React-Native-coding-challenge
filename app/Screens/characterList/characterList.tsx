@@ -25,6 +25,10 @@ const CharacterList = () => {
           image
           species
           gender
+          episode{
+            name
+            air_date
+          }
         }
         info {
           next
@@ -73,13 +77,19 @@ const CharacterList = () => {
           }}
           data={data.characters.results}
           renderItem={({item}) => {
+            console.log({item});
+
             return (
               <CharachterCard
                 image={item.image}
                 id={item.id}
                 name={item.name}
-                // species
-                // gender
+                // to be use in the second screen
+                moreInfo={{
+                  species: item.species,
+                  gender: item.gender,
+                  episode: item.episode,
+                }}
               />
             );
           }}
@@ -93,14 +103,14 @@ const CharacterList = () => {
     image,
     name,
     id,
+    moreInfo,
   }: {
     image: string;
     name: string;
     id: number;
+    moreInfo: object;
   }) {
-    navigation.push('CharachterDetails', {id, name, image});
-
-    console.log('selectedCharacter id :' + name);
+    navigation.push('CharachterDetails', {id, name, image, moreInfo});
   }
 
   // search for character by name (on the fly)
@@ -115,13 +125,14 @@ const CharacterList = () => {
     image: string;
     name: string;
     id: number;
+    moreInfo: object;
   };
 
-  const CharachterCard = ({image, name, id}: CharachterCardProps) => {
+  const CharachterCard = ({image, name, id, moreInfo}: CharachterCardProps) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          onSelectCharachter({image, name, id});
+          onSelectCharachter({image, name, id, moreInfo});
         }}>
         <View style={styles.ListItemHolder}>
           <View style={styles.pictureHolder}>
