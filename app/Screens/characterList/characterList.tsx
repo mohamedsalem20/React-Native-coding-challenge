@@ -71,6 +71,7 @@ const CharacterList = () => {
       <View>
         {/* List of charachters  */}
         <FlatList
+          keyboardShouldPersistTaps="always"
           onEndReachedThreshold={0.01}
           onEndReached={() => {
             console.log('fetching more ...', data?.characters?.results.length);
@@ -153,12 +154,24 @@ const CharacterList = () => {
   return (
     <View>
       {/* Search box area  */}
-      <TextInput
-        value={namequeryHolder}
-        style={styles.searchBar}
-        placeholder={'Search by name'}
-        onChangeText={searchForUserByName}
-      />
+      <View>
+        <TextInput
+          value={namequeryHolder}
+          style={styles.searchBar}
+          placeholder={'Search by name'}
+          onChangeText={searchForUserByName}
+        />
+        {/* Clear search box  */}
+        {namequeryHolder.length > 0 ? (
+          <TouchableOpacity
+            onPress={() => {
+              setnamequeryHolder('');
+            }}
+            style={styles.clearSearchTextBtn}>
+            <Text style={styles.clearSearchText}>X</Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
       <FetchCharachters />
     </View>
   );
@@ -225,6 +238,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#2c3e50',
     marginHorizontal: 10,
+  },
+  clearSearchTextBtn: {
+    position: 'absolute',
+    right: 5,
+    top: 15,
+  },
+  clearSearchText: {
+    backgroundColor: 'red',
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    textAlign: 'center',
   },
 });
 
