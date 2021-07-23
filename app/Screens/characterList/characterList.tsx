@@ -86,11 +86,14 @@ const CharacterList = ({navigation}) => {
   const [Limit, setLimit] = useState(5);
 
   function FetchCharachters() {
-    const {loading, error, data, fetchMore} = useQuery(GET_CHARACHTERS, {
-      variables: {
-        charactersPage: 1,
+    const {loading, error, data, fetchMore} = useQuery(
+      namequeryHolder === '' ? GET_CHARACHTERS : CHARACTERS_QUERY_FILTER,
+      {
+        variables: {
+          charactersPage: 1,
+        },
       },
-    });
+    );
 
     function loadMore() {
       console.log('loadMore');
@@ -276,17 +279,6 @@ const CharacterList = ({navigation}) => {
         onPress={() => {
           onSelectCharachter({image, name, id, moreInfo});
         }}>
-        {/* <View style={styles.ListItemHolder}>
-          <View style={styles.pictureHolder}>
-            <ActivityIndicator
-              size={'small'}
-              color={'black'}
-              style={{position: 'absolute'}}
-            />
-            <Image source={{uri: image}} style={styles.pictureSize} />
-          </View>
-          <Text style={styles.name}>{name}</Text>
-        </View> */}
         <View
           style={{
             height: screenWidth / 2.5,

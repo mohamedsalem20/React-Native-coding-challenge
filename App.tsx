@@ -6,6 +6,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import CharacterList from './app/Screens/characterList/characterList';
 import CharachterDetails from './app/Screens/charachterDetails/CharachterDetails';
 import {offsetLimitPagination} from '@apollo/client/utilities';
+import CharactersList from './app/Screens/characterList/CharactersList';
 
 // import StackNavigator from './app/Navigation/StackNavigator';
 
@@ -64,7 +65,7 @@ const App = () => {
               headerTintColor: 'white',
             }}
             name="CharacterList"
-            component={CharacterList}
+            component={CharactersList}
           />
           <Stack.Screen
             options={{
