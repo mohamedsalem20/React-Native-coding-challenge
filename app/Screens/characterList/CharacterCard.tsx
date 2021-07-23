@@ -51,9 +51,7 @@ export const CharachterCard = ({
           style={styles.imageSize}
           resizeMode={'stretch'}
         />
-        <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18}}>
-          {name}
-        </Text>
+        <Text style={styles.charachterName}>{name}</Text>
       </View>
     </TouchableOpacity>
   );

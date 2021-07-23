@@ -1,17 +1,14 @@
-import React, {useState} from 'react';
-
-import {useQuery} from '@apollo/client';
+import {gql, useQuery} from '@apollo/client';
+import React from 'react';
+import {Button} from 'react-native';
 import {FlatList, Text} from 'react-native';
 import {View} from 'react-native';
-import {GET_CHARACHTERS, loadMore} from '../../GraphqlHelper';
+import {GET_CHARACHTERS} from '../../GraphqlHelper';
 import {CharachterCard} from './CharacterCard';
 import Error from './components/Error';
 import Loading from './components/Loading';
-import {SearchBar} from 'react-native-screens';
-import {SearchBox} from './components/SearchBox';
 
-export default function CharactersList() {
-  const [namequeryHolder, setnamequeryHolder] = useState('');
+export default function FilterCharacters() {
   const {loading, error, data, fetchMore} = useQuery(GET_CHARACHTERS, {
     variables: {
       charactersPage: 1,
@@ -24,15 +21,20 @@ export default function CharactersList() {
     return <Error />;
   }
 
+  function loadMore() {
+    if (data.characters.info.next && !loading) {
+      fetchMore({
+        variables: {
+          charactersPage: data.characters.info.next,
+        },
+      });
+    }
+  }
   return (
     <View
       style={{
         backgroundColor: '#223762',
       }}>
-      <SearchBox
-        namequeryHolder={namequeryHolder}
-        setnamequeryHolder={setnamequeryHolder}
-      />
       <FlatList
         ListFooterComponent={() => {
           return <View>{data.characters.info.next ? <Loading /> : null}</View>;
@@ -40,9 +42,7 @@ export default function CharactersList() {
         numColumns={3}
         keyboardShouldPersistTaps="always"
         onEndReachedThreshold={0.01}
-        onEndReached={() => {
-          loadMore(fetchMore, data, loading);
-        }}
+        onEndReached={loadMore}
         data={data.characters.results}
         renderItem={({item}) => {
           return (
@@ -50,7 +50,7 @@ export default function CharactersList() {
               image={item.image}
               id={item.id}
               name={item.name}
-              // to be used in the second screen
+              // to be use in the second screen
               moreInfo={{
                 species: item.species,
                 gender: item.gender,

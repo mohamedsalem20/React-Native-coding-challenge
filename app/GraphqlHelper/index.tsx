@@ -1,5 +1,15 @@
 import {gql, InMemoryCache} from '@apollo/client';
 
+export function loadMore(fetchMore, data, loading) {
+  if (data.characters.info.next && !loading) {
+    fetchMore({
+      variables: {
+        charactersPage: data.characters.info.next,
+      },
+    });
+  }
+}
+
 export const GET_CHARACHTERS = gql`
   query Characters($charactersPage: Int) {
     characters(page: $charactersPage) {

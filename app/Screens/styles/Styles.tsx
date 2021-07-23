@@ -23,4 +23,9 @@ export const styles = StyleSheet.create({
     marginHorizontal: 4,
     marginVertical: 20,
   },
+  charachterName: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
 });
