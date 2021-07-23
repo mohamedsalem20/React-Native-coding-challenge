@@ -29,15 +29,26 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            animationEnabled: true,
+            animationTypeForReplace: 'pop',
+            headerStyle: {backgroundColor: '#223762'},
+            headerTintColor: 'white',
+          }}>
           <Stack.Screen
             options={{
-              headerShown: false,
+              // headerShown: false,
+              title: 'Rick and Morty',
+              headerTintColor: 'white',
             }}
             name="CharacterList"
             component={CharacterList}
           />
           <Stack.Screen
+            options={{
+              title: 'Charachter Details',
+            }}
             name="CharachterDetails"
             component={CharachterDetails}
           />

@@ -11,55 +11,114 @@ const CharachterDetails = ({route}: any) => {
   const moreInfo = route.params.moreInfo;
 
   return (
-    <ScrollView>
-      <Image
-        source={{uri: image}}
-        style={{
-          height: 200,
-          width: 200,
-        }}
-      />
-      <Text
-        style={{
-          color: 'black',
-          fontWeight: 'bold',
-          fontSize: 30,
-        }}>
-        {name}
-      </Text>
-      <Text
-        style={{
-          color: 'gray',
-          fontSize: 20,
-        }}>
-        {moreInfo.species}
-      </Text>
-      <Text
-        style={{
-          color: 'gray',
-          fontSize: 20,
-        }}>
-        {moreInfo.gender}
-      </Text>
+    <ScrollView
+      style={{
+        backgroundColor: '#223762',
+      }}>
+      <View>
+        <Image
+          source={{uri: image}}
+          style={{
+            height: 200,
+            width: '100%',
+          }}
+          blurRadius={3}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            bottom: -90,
+            left: 10,
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'flex-end',
+            }}>
+            <Image
+              source={{uri: image}}
+              style={{
+                height: 150,
+                width: 150,
+                borderRadius: 10,
+              }}
+            />
+            <View>
+              <Text
+                style={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: 30,
+                  marginHorizontal: 5,
+                }}>
+                {name}
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginHorizontal: 5,
+                }}>
+                <View>
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontSize: 18,
+                    }}>
+                    {moreInfo.species}, {moreInfo.gender}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
 
       {/* list of episodes */}
-      <Text>episodes : </Text>
+      <View style={{marginTop: 100}}>
+        <Text
+          style={{
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: 25,
+          }}>
+          {' '}
+          {moreInfo.episode.length} Episodes{' '}
+        </Text>
 
-      {moreInfo.episode.map(item => {
-        return (
-          <View
-            key={item.name}
-            style={{
-              backgroundColor: 'gray',
-              padding: 10,
-              margin: 5,
-            }}>
-            <Text>
-              {item.name} / {item.air_date}
-            </Text>
-          </View>
-        );
-      })}
+        {moreInfo.episode.map(item => {
+          return (
+            <View
+              key={item.name}
+              style={{
+                backgroundColor: '#F1F1F1',
+                height: 80,
+                margin: 5,
+                alignItems: 'center',
+                flexDirection: 'row',
+                padding: 10,
+              }}>
+              <View>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontWeight: 'bold',
+                    fontSize: 20,
+                  }}>
+                  {item.name}
+                </Text>
+                <Text
+                  style={{
+                    color: 'gray',
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                  }}>
+                  {item.air_date}
+                </Text>
+              </View>
+            </View>
+          );
+        })}
+      </View>
     </ScrollView>
   );
 };

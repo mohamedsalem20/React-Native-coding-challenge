@@ -12,10 +12,9 @@ import {
 } from 'react-native';
 
 import {useQuery, gql} from '@apollo/client';
-import {useNavigation} from '@react-navigation/native';
 import {Button} from 'react-native';
 
-const CharacterList = () => {
+const CharacterList = ({navigation}) => {
   const [namequeryHolder, setnamequeryHolder] = useState('');
   const [nextPage, setnextPage] = useState(0);
 
@@ -56,59 +55,100 @@ const CharacterList = () => {
       }
       info {
         next
+        count
       }
     }
   }
 `;
   const [results, setresults] = useState([]);
-
-  const navigation = useNavigation();
+  const [Limit, setLimit] = useState(5);
 
   function FetchCharachters() {
     const {loading, error, data, fetchMore} = useQuery(
       namequeryHolder.length > 0 ? CHARACTERS_QUERY_FILTER : CHARACTERS_QUERY,
+      {
+        fetchPolicy: 'cache-and-network',
+        notifyOnNetworkStatusChange: true,
+      },
     );
 
     function loadMore() {
-      const next = data?.characters.info.next;
-      setnextPage(next);
-
+      console.log('loadMore');
       fetchMore({
-        query: CHARACTERS_QUERY,
+        variables: {
+          // page: data.charachters.info.page,
+        },
         updateQuery: (prev, {fetchMoreResult}) => {
-          console.log('fetchMoreResult IDS');
-
-          fetchMoreResult.characters.results.forEach(elm => {
-            console.log(elm.id);
-          });
-
-          console.log('prev IDS');
-
-          prev.characters.results.forEach(elm => {
-            console.log(elm.id);
-          });
-
-          if (!fetchMoreResult) {
-            return prev;
-          }
-          // return Object.assign({}, prev, {
-          //   characters: [...prev.characters, ...fetchMoreResult.characters],
-          // });
-          // console.log(prev);
-          const newReuslt = fetchMoreResult.characters.results;
-          setresults([...results, ...newReuslt]);
+          if (!fetchMoreResult) return prev;
+          console.log();
         },
       });
+      // const next = data?.characters.info.next;
+      // setnextPage(next);
+
+      // fetchMore({
+      //   query: CHARACTERS_QUERY,
+      //   updateQuery: (prev, {fetchMoreResult}) => {
+      //     console.log('fetchMoreResult IDS');
+
+      //     fetchMoreResult.characters.results.forEach(elm => {
+      //       console.log(elm.id);
+      //     });
+
+      //     console.log('prev IDS');
+
+      //     prev.characters.results.forEach(elm => {
+      //       console.log(elm.id);
+      //     });
+
+      //     if (!fetchMoreResult) {
+      //       return prev;
+      //     }
+      //     // return Object.assign({}, prev, {
+      //     //   characters: [...prev.characters, ...fetchMoreResult.characters],
+      //     // });
+      //     // console.log(prev);
+      //     const newReuslt = fetchMoreResult.characters.results;
+      //     setresults([...results, ...newReuslt]);
+      //   },
+      // });
     }
 
     if (loading)
       return (
-        <View style={styles.LoadingHolder}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginVertical: 20,
+          }}>
           <ActivityIndicator size={'small'} color={'white'} />
-          <Text style={styles.LoadingMsg}>Fetching data ...</Text>
+          <Text
+            style={{
+              color: 'white',
+              marginHorizontal: 10,
+            }}>
+            Loadin charachters ...
+          </Text>
         </View>
       );
-    if (error) return <Text>Error :(</Text>;
+    if (error)
+      return (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginVertical: 20,
+          }}>
+          <Text
+            style={{
+              color: 'white',
+              marginHorizontal: 10,
+            }}>
+            No charachter found.
+          </Text>
+        </View>
+      );
 
     // EmptyList to be implimented
 
@@ -122,15 +162,33 @@ const CharacterList = () => {
 
     return (
       <View>
+        {/* <Text
+          style={{
+            color: 'white',
+          }}>
+          {data.characters.results.length}
+        </Text> */}
         {/* <Button title={'load more'} onPress={loadMore} /> */}
         {/* List of charachters  */}
         <FlatList
-          style={{margin: 5}}
+          ListFooterComponent={() => {
+            return (
+              <Text
+                style={{
+                  color: 'white',
+                  textAlign: 'center',
+                  marginVertical: 50,
+                }}>
+                Pagination to be implimented ...
+              </Text>
+            );
+          }}
           numColumns={3}
           keyboardShouldPersistTaps="always"
           onEndReachedThreshold={0.01}
-          onEndReached={loadMore}
-          data={results}
+          // onEndReached={loadMore}
+          // data={results}
+          data={data.characters.results}
           renderItem={({item}) => {
             return (
               <CharachterCard
@@ -169,7 +227,6 @@ const CharacterList = () => {
   // search for character by name (on the fly)
   function searchForUserByName(input: string) {
     setnamequeryHolder(input);
-    console.log('https://rickandmortyapi.com/api/character/?name=' + input);
   }
 
   // list Item
@@ -223,40 +280,29 @@ const CharacterList = () => {
             }}
             resizeMode={'stretch'}
           />
-          <Text style={{color: 'white', fontWeight: 'bold'}}>{name}</Text>
+          <Text style={{color: 'white', fontWeight: 'bold', fontSize: 15}}>
+            {name}
+          </Text>
         </View>
       </TouchableOpacity>
     );
   };
 
-  return (
-    <View
-      style={{
-        backgroundColor: '#223762',
-        flex: 1,
-      }}>
-      {/* Search box area  */}
-      <View style={{}}>
+  const SearchBox = () => {
+    return (
+      <View>
         <TextInput
           value={namequeryHolder}
           style={{
             backgroundColor: 'white',
             padding: 10,
-            marginHorizontal: 10,
-            marginTop: 10,
+            marginHorizontal: 20,
+            borderRadius: 5,
           }}
           placeholder={'Search by name'}
           onChangeText={searchForUserByName}
         />
-        <Text
-          style={{
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: 20,
-            marginLeft: 10,
-          }}>
-          Rick and Morty ({results.length})
-        </Text>
+
         {/* Clear search box  */}
         {namequeryHolder.length > 0 ? (
           <TouchableOpacity
@@ -265,8 +311,8 @@ const CharacterList = () => {
             }}
             style={{
               position: 'absolute',
-              right: 35,
-              top: 25,
+              right: 25,
+              top: 15,
             }}>
             <Text
               style={{
@@ -282,7 +328,61 @@ const CharacterList = () => {
           </TouchableOpacity>
         ) : null}
       </View>
-      <FetchCharachters />
+    );
+  };
+
+  return (
+    <View
+      style={{
+        backgroundColor: '#223762',
+        flex: 1,
+        height: '100%',
+      }}>
+      {/* Search box area  */}
+      <View style={{height: '10%'}}>
+        <View>
+          <TextInput
+            value={namequeryHolder}
+            style={{
+              backgroundColor: 'white',
+              padding: 10,
+              marginHorizontal: 20,
+              borderRadius: 5,
+              height: 40,
+            }}
+            placeholder={'Search by name'}
+            onChangeText={searchForUserByName}
+          />
+
+          {/* Clear search box  */}
+          {namequeryHolder !== '' ? (
+            <TouchableOpacity
+              onPress={() => {
+                setnamequeryHolder('');
+              }}
+              style={{
+                position: 'absolute',
+                right: 25,
+                top: 15,
+              }}>
+              <Text
+                style={{
+                  backgroundColor: 'red',
+                  height: 20,
+                  width: 20,
+                  borderRadius: 10,
+                  textAlign: 'center',
+                  color: 'white',
+                }}>
+                X
+              </Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </View>
+      <View style={{height: '90%'}}>
+        <FetchCharachters />
+      </View>
     </View>
   );
 };
