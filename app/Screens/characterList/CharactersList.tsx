@@ -3,31 +3,10 @@ import React from 'react';
 import {Button} from 'react-native';
 import {FlatList, Text} from 'react-native';
 import {View} from 'react-native';
+import {GET_CHARACHTERS} from '../../GraphqlHelper';
 import {CharachterCard} from './CharacterCard';
 
 export default function CharactersList() {
-  const GET_CHARACHTERS = gql`
-    query Characters($charactersPage: Int) {
-      characters(page: $charactersPage) {
-        results {
-          id
-          name
-          image
-          species
-          gender
-          episode {
-            name
-            air_date
-          }
-        }
-        info {
-          next
-          count
-        }
-      }
-    }
-  `;
-
   const {loading, error, data, fetchMore} = useQuery(GET_CHARACHTERS, {
     variables: {
       charactersPage: 1,
@@ -36,7 +15,7 @@ export default function CharactersList() {
   if (loading) {
     return <Text>Laodnig ...</Text>;
   }
-  if (loading) {
+  if (error) {
     return <Text>error ...</Text>;
   }
 

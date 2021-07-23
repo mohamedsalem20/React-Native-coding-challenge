@@ -2,7 +2,15 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 
-import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {styles} from '../styles/Styles';
 
 export const CharachterCard = ({
   image,
@@ -15,7 +23,6 @@ export const CharachterCard = ({
   id: number;
   moreInfo: object;
 }) => {
-  const screenWidth = Dimensions.get('window').width;
   const navigation = useNavigation();
   // on selct Charachter
   function onSelectCharachter({
@@ -38,30 +45,13 @@ export const CharachterCard = ({
       onPress={() => {
         onSelectCharachter({image, name, id, moreInfo});
       }}>
-      <View
-        style={{
-          height: screenWidth / 2.5,
-          width: screenWidth / 3.2,
-          marginHorizontal: 4,
-          marginVertical: 20,
-        }}>
+      <View style={styles.ImageHolder}>
         <Image
           source={{uri: image}}
-          style={{
-            height: screenWidth / 2.5,
-            width: screenWidth / 3.2,
-            borderRadius: 10,
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-          }}
+          style={styles.imageSize}
           resizeMode={'stretch'}
         />
-        <Text style={{color: 'white', fontWeight: 'bold', fontSize: 15}}>
+        <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18}}>
           {name}
         </Text>
       </View>
