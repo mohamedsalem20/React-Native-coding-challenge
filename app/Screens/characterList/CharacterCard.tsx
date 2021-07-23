@@ -1,4 +1,5 @@
 // list Item
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 
 import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
@@ -15,7 +16,7 @@ export const CharachterCard = ({
   moreInfo: object;
 }) => {
   const screenWidth = Dimensions.get('window').width;
-
+  const navigation = useNavigation();
   // on selct Charachter
   function onSelectCharachter({
     image,

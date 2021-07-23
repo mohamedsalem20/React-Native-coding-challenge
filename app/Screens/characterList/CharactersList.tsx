@@ -41,7 +41,7 @@ export default function CharactersList() {
   }
 
   function loadMore() {
-    if (data.characters.info.next) {
+    if (data.characters.info.next && !loading) {
       fetchMore({
         variables: {
           charactersPage: data.characters.info.next,
@@ -54,12 +54,6 @@ export default function CharactersList() {
       style={{
         backgroundColor: '#223762',
       }}>
-      <Button
-        title="MORE"
-        onPress={() => {
-          console.log('fetchMore....');
-        }}
-      />
       <FlatList
         numColumns={3}
         keyboardShouldPersistTaps="always"
