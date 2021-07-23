@@ -18,6 +18,28 @@ const CharacterList = ({navigation}) => {
   const [namequeryHolder, setnamequeryHolder] = useState('');
   const [nextPage, setnextPage] = useState(0);
 
+  const GET_CHARACHTERS = gql`
+    query Characters($charactersPage: Int) {
+      characters(page: $charactersPage) {
+        results {
+          id
+          name
+          image
+          species
+          gender
+          episode {
+            name
+            air_date
+          }
+        }
+        info {
+          next
+          count
+        }
+      }
+    }
+  `;
+
   const CHARACTERS_QUERY = gql`
     query {
       characters(filter: {name: "${namequeryHolder}"}, page : ${nextPage}) {
@@ -64,54 +86,22 @@ const CharacterList = ({navigation}) => {
   const [Limit, setLimit] = useState(5);
 
   function FetchCharachters() {
-    const {loading, error, data, fetchMore} = useQuery(
-      namequeryHolder.length > 0 ? CHARACTERS_QUERY_FILTER : CHARACTERS_QUERY,
-      {
-        fetchPolicy: 'cache-and-network',
-        notifyOnNetworkStatusChange: true,
+    const {loading, error, data, fetchMore} = useQuery(GET_CHARACHTERS, {
+      variables: {
+        charactersPage: 1,
       },
-    );
+    });
 
     function loadMore() {
       console.log('loadMore');
-      fetchMore({
-        variables: {
-          // page: data.charachters.info.page,
-        },
-        updateQuery: (prev, {fetchMoreResult}) => {
-          if (!fetchMoreResult) return prev;
-          console.log();
-        },
-      });
-      // const next = data?.characters.info.next;
-      // setnextPage(next);
 
-      // fetchMore({
-      //   query: CHARACTERS_QUERY,
-      //   updateQuery: (prev, {fetchMoreResult}) => {
-      //     console.log('fetchMoreResult IDS');
-
-      //     fetchMoreResult.characters.results.forEach(elm => {
-      //       console.log(elm.id);
-      //     });
-
-      //     console.log('prev IDS');
-
-      //     prev.characters.results.forEach(elm => {
-      //       console.log(elm.id);
-      //     });
-
-      //     if (!fetchMoreResult) {
-      //       return prev;
-      //     }
-      //     // return Object.assign({}, prev, {
-      //     //   characters: [...prev.characters, ...fetchMoreResult.characters],
-      //     // });
-      //     // console.log(prev);
-      //     const newReuslt = fetchMoreResult.characters.results;
-      //     setresults([...results, ...newReuslt]);
-      //   },
-      // });
+      if (data.characters.info.next) {
+        fetchMore({
+          variables: {
+            charactersPage: data.characters.info?.next,
+          },
+        });
+      }
     }
 
     if (loading)
@@ -160,15 +150,55 @@ const CharacterList = ({navigation}) => {
       );
     }
 
+    // setresults([...results, ...data.characters.results]);
+    // setresults(data.characters.results);
+
+    const newReslut = data.characters.results;
+
+    const mergedResult = [...results, ...newReslut];
+
+    setresults(newReslut);
     return (
       <View>
-        {/* <Text
+        <Text
           style={{
             color: 'white',
           }}>
           {data.characters.results.length}
-        </Text> */}
-        {/* <Button title={'load more'} onPress={loadMore} /> */}
+        </Text>
+        <Button
+          title={'load more'}
+          onPress={() => {
+            console.log('load more');
+
+            // const {next} = data.charachters.info.next;
+
+            // setnextPage(data.characters.info.next);
+
+            // fetchMoreResult.viewer.repositories.edges = [
+            //         ...prevResult.viewer.repositories.edges,
+            //         ...fetchMoreResult.viewer.repositories.edges,
+            //       ]
+
+            // fetchMore({
+            //   variables: {page: next},
+            //   updateQuery: (prevResult, {fetchMoreResult}) => {
+            //     fetchMoreResult.viewer.repositories.edges = [
+            //       ...prevResult.viewer.repositories.edges,
+            //       ...fetchMoreResult.viewer.repositories.edges,
+            //     ];
+            //     return fetchMoreResult;
+            //   },
+            // });
+            if (data.characters.info.next) {
+              fetchMore({
+                variables: {
+                  charactersPage: data.characters.info.next,
+                },
+              });
+            }
+          }}
+        />
         {/* List of charachters  */}
         <FlatList
           ListFooterComponent={() => {
@@ -179,14 +209,14 @@ const CharacterList = ({navigation}) => {
                   textAlign: 'center',
                   marginVertical: 50,
                 }}>
-                Pagination to be implimented ...
+                Loading more ...
               </Text>
             );
           }}
           numColumns={3}
           keyboardShouldPersistTaps="always"
           onEndReachedThreshold={0.01}
-          // onEndReached={loadMore}
+          onEndReached={loadMore}
           // data={results}
           data={data.characters.results}
           renderItem={({item}) => {

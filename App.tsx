@@ -14,7 +14,28 @@ const App = () => {
     typePolicies: {
       Query: {
         fields: {
-          users: offsetLimitPagination(),
+          characters: {
+            keyArgs: false,
+            merge(existing = [], incoming) {
+              var mergeExistingIncoming;
+              if (existing.results) {
+                mergeExistingIncoming = [
+                  ...existing.results,
+                  ...incoming.results,
+                ];
+              } else {
+                mergeExistingIncoming = [...incoming.results];
+              }
+
+              const resultHolder = {
+                info: incoming.info,
+                results: mergeExistingIncoming,
+                __typename: incoming.__typename,
+              };
+
+              return resultHolder;
+            },
+          },
         },
       },
     },
@@ -22,7 +43,7 @@ const App = () => {
   // Initialize Apollo Client
   const client = new ApolloClient({
     uri: 'https://rickandmortyapi.com/graphql',
-    cache: cache,
+    cache,
   });
   const Stack = createStackNavigator();
 
