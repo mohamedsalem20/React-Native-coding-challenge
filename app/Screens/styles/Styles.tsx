@@ -47,4 +47,43 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
+  DetailsScreen: {
+    backgroundColor: '#223762',
+  },
+  CoverImage: {
+    height: 200,
+    width: '100%',
+  },
+  proflieImageHolder: {
+    position: 'absolute',
+    bottom: -90,
+    left: 10,
+  },
+  proflieImage: {height: 150, width: 150, borderRadius: 10},
+  speciesGender: {color: 'white', fontSize: 18},
+  characterName: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginHorizontal: 5,
+  },
+  episods: {color: 'white', fontWeight: 'bold', fontSize: 25},
+  episodsList: {
+    backgroundColor: '#F1F1F1',
+    height: 80,
+    margin: 5,
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 10,
+  },
+  episodTitle: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  episeod_air_date: {
+    color: 'gray',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
 });
