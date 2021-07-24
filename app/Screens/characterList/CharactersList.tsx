@@ -8,9 +8,11 @@ import {CharachterCard} from './CharacterCard';
 import Error from './components/Error';
 import Loading from './components/Loading';
 import {SearchBox} from './components/SearchBox';
-import {useEffect} from 'react';
+import {TextInput} from 'react-native-gesture-handler';
 
-export default function CharactersList({namequeryHolder, setnamequeryHolder}) {
+export default function CharactersList() {
+  const [namequeryHolder, setnamequeryHolder] = useState('');
+  const [filtredData, setfiltredData] = useState([]);
   const {loading, error, data, fetchMore} = useQuery(GET_CHARACHTERS, {
     variables: {
       charactersPage: 1,
@@ -25,32 +27,55 @@ export default function CharactersList({namequeryHolder, setnamequeryHolder}) {
   }
 
   return (
-    <View>
-      <SearchBox
-        onDelete={() => {}}
-        namequeryHolder={namequeryHolder}
-        setnamequeryHolder={setnamequeryHolder}
-        onSearchValueChange={value => {
+    <View
+      style={{
+        backgroundColor: '#223762',
+      }}>
+      <TextInput
+        value={namequeryHolder}
+        placeholder={'search by name'}
+        onChangeText={async value => {
           setnamequeryHolder(value);
-          console.log('filter');
-          fetchMore({
-            variables: {
-              charactersFilter: {name: value},
-            },
-          });
+          if (value === '') {
+            setnamequeryHolder(value);
+          } else {
+            setnamequeryHolder(value);
+            try {
+              const response = await fetch(
+                'https://rickandmortyapi.com/api/character/?name=' + value,
+              );
+              const json = await response.json();
+              console.log(response);
+
+              setfiltredData(json.results);
+            } catch (error) {
+              console.log(error);
+              setfiltredData([]);
+            }
+          }
         }}
       />
       <FlatList
         ListFooterComponent={() => {
-          return <View>{data.characters.info.next ? <Loading /> : null}</View>;
+          return (
+            <View>
+              {data.characters.info.next && namequeryHolder.length === 0 ? (
+                <Loading />
+              ) : null}
+            </View>
+          );
         }}
         numColumns={3}
         keyboardShouldPersistTaps="always"
         onEndReachedThreshold={0.01}
         onEndReached={() => {
-          loadMore(fetchMore, data, loading);
+          if (namequeryHolder.length <= 0) {
+            loadMore(fetchMore, data, loading);
+          }
         }}
-        data={data.characters.results}
+        data={
+          namequeryHolder.length > 0 ? filtredData : data.characters.results
+        }
         renderItem={({item}) => {
           return (
             <CharachterCard
