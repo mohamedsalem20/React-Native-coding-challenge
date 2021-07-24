@@ -1,45 +1,66 @@
 import React, {useState} from 'react';
 
 import {useQuery} from '@apollo/client';
-import {FlatList, Text} from 'react-native';
+import {Button, FlatList, Text} from 'react-native';
 import {View} from 'react-native';
-import {GET_CHARACHTERS, loadMore} from '../../GraphqlHelper';
+import {cache, client, GET_CHARACHTERS, loadMore} from '../../GraphqlHelper';
 import {CharachterCard} from './CharacterCard';
 import Error from './components/Error';
 import Loading from './components/Loading';
 import {SearchBox} from './components/SearchBox';
 import {TextInput} from 'react-native-gesture-handler';
+import {useEffect} from 'react';
 
-export default function CharactersList() {
-  const [namequeryHolder, setnamequeryHolder] = useState('');
+export default function CharactersList({namequeryHolder}) {
+  // const [namequeryHolder, setnamequeryHolder] = useState('');
   const [filtredData, setfiltredData] = useState([]);
 
-  async function filterCharacters(value) {
-    setnamequeryHolder(value);
-    if (value === '') {
-      setnamequeryHolder(value);
-    } else {
-      setnamequeryHolder(value);
-      try {
-        const response = await fetch(
-          'https://rickandmortyapi.com/api/character/?name=' + value,
-        );
-        const json = await response.json();
-        console.log(response);
+  useEffect(() => {
+    client.clearStore().then(() => {
+      fetchMore({
+        variables: {
+          charactersFilter: {name: namequeryHolder},
+        },
+      });
+    });
+  }, [namequeryHolder]);
+  const [result, setresult] = useState([]);
 
-        setfiltredData(json.results);
-      } catch (error) {
-        console.log(error);
-        setfiltredData([]);
-      }
-    }
-  }
+  // async function filterCharacters(value) {
+  //   // if (value === '') {
+  //   //   setnamequeryHolder(value);
+  //   // } else {
+  //   //   setnamequeryHolder(value);
+  //   //   try {
+  //   //     const response = await fetch(
+  //   //       'https://rickandmortyapi.com/api/character/?name=' + value,
+  //   //     );
+  //   //     const json = await response.json();
+  //   //     console.log(response);
+
+  //   //     setfiltredData(json.results);
+  //   //   } catch (error) {
+  //   //     console.log(error);
+  //   //     setfiltredData([]);
+  //   //   }
+  //   // }
+  //   setnamequeryHolder(value);
+
+  //   client.clearStore();
+
+  //   fetchMore({
+  //     variables: {
+  //       charactersFilter: {name: namequeryHolder},
+  //     },
+  //   });
+  // }
   const {loading, error, data, fetchMore} = useQuery(GET_CHARACHTERS, {
     variables: {
       charactersPage: 1,
       charactersFilter: {name: namequeryHolder},
     },
   });
+
   if (loading) {
     return <Loading />;
   }
@@ -53,30 +74,32 @@ export default function CharactersList() {
         backgroundColor: '#223762',
         height: '100%',
       }}>
-      <View
-        style={{
-          height: '10%',
-        }}>
-        <SearchBox
-          namequeryHolder={namequeryHolder}
-          setnamequeryHolder={setnamequeryHolder}
-          onSearchValueChange={filterCharacters}
-        />
-      </View>
+      <Button
+        title={'modify cach'}
+        onPress={() => {
+          client.clearStore();
+          fetchMore({
+            variables: {
+              charactersFilter: {name: namequeryHolder},
+            },
+          });
+        }}
+      />
+
       <View
         style={{
           height: '90%',
         }}>
         <FlatList
-          ListFooterComponent={() => {
-            return (
-              <View>
-                {data.characters.info.next && namequeryHolder.length === 0 ? (
-                  <Loading />
-                ) : null}
-              </View>
-            );
-          }}
+          // ListFooterComponent={() => {
+          //   return (
+          //     <View>
+          //       {data.characters.info.next && namequeryHolder.length === 0 ? (
+          //         <Loading />
+          //       ) : null}
+          //     </View>
+          //   );
+          // }}
           numColumns={3}
           keyboardShouldPersistTaps="always"
           onEndReachedThreshold={0.01}
@@ -85,9 +108,10 @@ export default function CharactersList() {
               loadMore(fetchMore, data, loading);
             }
           }}
-          data={
-            namequeryHolder.length > 0 ? filtredData : data.characters.results
-          }
+          // data={
+          //   namequeryHolder.length > 0 ? filtredData : data.characters.results
+          // }
+          data={data?.characters?.results}
           renderItem={({item}) => {
             return (
               <CharachterCard
