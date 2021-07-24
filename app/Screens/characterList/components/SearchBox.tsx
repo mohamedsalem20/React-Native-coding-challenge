@@ -3,18 +3,18 @@ import React from 'react';
 import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {styles} from '../../styles/Styles';
 
-export const SearchBox = ({namequeryHolder, setnamequeryHolder}) => {
-  function searchForUserByName(value) {
-    console.log('searchForUserByName');
-    setnamequeryHolder(value);
-  }
+export const SearchBox = ({
+  namequeryHolder,
+  setnamequeryHolder,
+  onSearchValueChange,
+}) => {
   return (
     <View>
       <TextInput
         value={namequeryHolder}
         style={styles.SearchBox}
         placeholder={'Search by name'}
-        onChangeText={searchForUserByName}
+        onChangeText={onSearchValueChange}
       />
 
       {/* Clear search box  */}

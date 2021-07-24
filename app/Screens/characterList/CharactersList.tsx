@@ -26,17 +26,23 @@ export default function CharactersList({namequeryHolder, setnamequeryHolder}) {
 
   return (
     <View>
+      <SearchBox
+        onDelete={() => {}}
+        namequeryHolder={namequeryHolder}
+        setnamequeryHolder={setnamequeryHolder}
+        onSearchValueChange={value => {
+          setnamequeryHolder(value);
+          console.log('filter');
+          fetchMore({
+            variables: {
+              charactersFilter: {name: value},
+            },
+          });
+        }}
+      />
       <FlatList
         ListFooterComponent={() => {
           return <View>{data.characters.info.next ? <Loading /> : null}</View>;
-        }}
-        ListHeaderComponent={() => {
-          return (
-            <SearchBox
-              namequeryHolder={namequeryHolder}
-              setnamequeryHolder={setnamequeryHolder}
-            />
-          );
         }}
         numColumns={3}
         keyboardShouldPersistTaps="always"
