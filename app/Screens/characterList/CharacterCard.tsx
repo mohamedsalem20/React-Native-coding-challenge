@@ -2,14 +2,7 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 
-import {
-  Dimensions,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from '../styles/Styles';
 
 export const CharachterCard = ({

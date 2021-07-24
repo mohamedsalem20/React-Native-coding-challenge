@@ -86,4 +86,8 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
   },
+  characterListScreen: {
+    height: '100%',
+    backgroundColor: '#223762',
+  },
 });
