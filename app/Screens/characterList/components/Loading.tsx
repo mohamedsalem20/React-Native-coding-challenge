@@ -7,13 +7,14 @@ export default function Loading() {
       style={{
         flexDirection: 'row',
         justifyContent: 'center',
-        marginVertical: 20,
+        paddingVertical: 15,
       }}>
-      <ActivityIndicator size={'small'} color={'white'} />
+      <ActivityIndicator size={'small'} color={'green'} />
       <Text
         style={{
           color: 'white',
           marginHorizontal: 10,
+          fontSize: 20,
         }}>
         Loadin charachters ...
       </Text>

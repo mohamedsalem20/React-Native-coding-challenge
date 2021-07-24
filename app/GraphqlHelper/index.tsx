@@ -11,8 +11,8 @@ export function loadMore(fetchMore, data, loading) {
 }
 
 export const GET_CHARACHTERS = gql`
-  query Characters($charactersPage: Int) {
-    characters(page: $charactersPage) {
+  query Characters($charactersPage: Int, $charactersFilter: FilterCharacter) {
+    characters(page: $charactersPage, filter: $charactersFilter) {
       results {
         id
         name
@@ -31,6 +31,32 @@ export const GET_CHARACHTERS = gql`
     }
   }
 `;
+
+export function FILTER_CHARACHTERSGQL(namequeryHolder: string) {
+  const FILTER_CHARACHTERS = gql`
+query {
+  characters(filter: {name: "${namequeryHolder}"}) {
+    results {
+      id
+      name
+      image
+      species
+      gender
+      episode{
+        name
+        air_date
+      }
+    }
+    info {
+      next
+      count
+    }
+  }
+}
+`;
+
+  return FILTER_CHARACHTERS;
+}
 
 export const cache = new InMemoryCache({
   typePolicies: {

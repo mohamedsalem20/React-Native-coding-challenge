@@ -28,4 +28,23 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
   },
+  SearchBox: {
+    backgroundColor: 'white',
+    padding: 10,
+    marginHorizontal: 20,
+    borderRadius: 5,
+  },
+  SearchAreaClearBtn: {
+    position: 'absolute',
+    right: 25,
+    top: 15,
+  },
+  XBtn: {
+    backgroundColor: 'red',
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    textAlign: 'center',
+    color: 'white',
+  },
 });

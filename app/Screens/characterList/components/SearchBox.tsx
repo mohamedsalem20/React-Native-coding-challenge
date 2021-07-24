@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {styles} from '../../styles/Styles';
 
 export const SearchBox = ({namequeryHolder, setnamequeryHolder}) => {
   function searchForUserByName(value) {
@@ -11,12 +12,7 @@ export const SearchBox = ({namequeryHolder, setnamequeryHolder}) => {
     <View>
       <TextInput
         value={namequeryHolder}
-        style={{
-          backgroundColor: 'white',
-          padding: 10,
-          marginHorizontal: 20,
-          borderRadius: 5,
-        }}
+        style={styles.SearchBox}
         placeholder={'Search by name'}
         onChangeText={searchForUserByName}
       />
@@ -27,22 +23,8 @@ export const SearchBox = ({namequeryHolder, setnamequeryHolder}) => {
           onPress={() => {
             setnamequeryHolder('');
           }}
-          style={{
-            position: 'absolute',
-            right: 25,
-            top: 15,
-          }}>
-          <Text
-            style={{
-              backgroundColor: 'red',
-              height: 20,
-              width: 20,
-              borderRadius: 10,
-              textAlign: 'center',
-              color: 'white',
-            }}>
-            X
-          </Text>
+          style={styles.SearchAreaClearBtn}>
+          <Text style={styles.XBtn}>X</Text>
         </TouchableOpacity>
       ) : null}
     </View>

@@ -8,12 +8,29 @@ import {CharachterCard} from './CharacterCard';
 import Error from './components/Error';
 import Loading from './components/Loading';
 
-export default function FilterCharacters() {
-  const {loading, error, data, fetchMore} = useQuery(GET_CHARACHTERS, {
-    variables: {
-      charactersPage: 1,
-    },
-  });
+export default function FilterCharacters({namequeryHolder}) {
+  const FILTER_CHARACHTERS = gql`
+  query {
+    characters(filter: {name: "${namequeryHolder}"}) {
+      results {
+        id
+        name
+        image
+        species
+        gender
+        episode{
+          name
+          air_date
+        }
+      }
+      info {
+        next
+        count
+      }
+    }
+  }
+  `;
+  const {loading, error, data, fetchMore} = useQuery(FILTER_CHARACHTERS);
   if (loading) {
     return <Loading />;
   }
@@ -21,28 +38,20 @@ export default function FilterCharacters() {
     return <Error />;
   }
 
-  function loadMore() {
-    if (data.characters.info.next && !loading) {
-      fetchMore({
-        variables: {
-          charactersPage: data.characters.info.next,
-        },
-      });
-    }
-  }
+  console.log(data);
+
   return (
     <View
       style={{
         backgroundColor: '#223762',
       }}>
+      <Text>filter</Text>
       <FlatList
         ListFooterComponent={() => {
           return <View>{data.characters.info.next ? <Loading /> : null}</View>;
         }}
         numColumns={3}
         keyboardShouldPersistTaps="always"
-        onEndReachedThreshold={0.01}
-        onEndReached={loadMore}
         data={data.characters.results}
         renderItem={({item}) => {
           return (

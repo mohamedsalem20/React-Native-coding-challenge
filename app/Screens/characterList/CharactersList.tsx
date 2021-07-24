@@ -7,14 +7,14 @@ import {GET_CHARACHTERS, loadMore} from '../../GraphqlHelper';
 import {CharachterCard} from './CharacterCard';
 import Error from './components/Error';
 import Loading from './components/Loading';
-import {SearchBar} from 'react-native-screens';
 import {SearchBox} from './components/SearchBox';
+import {useEffect} from 'react';
 
-export default function CharactersList() {
-  const [namequeryHolder, setnamequeryHolder] = useState('');
+export default function CharactersList({namequeryHolder, setnamequeryHolder}) {
   const {loading, error, data, fetchMore} = useQuery(GET_CHARACHTERS, {
     variables: {
       charactersPage: 1,
+      charactersFilter: {name: namequeryHolder},
     },
   });
   if (loading) {
@@ -25,17 +25,18 @@ export default function CharactersList() {
   }
 
   return (
-    <View
-      style={{
-        backgroundColor: '#223762',
-      }}>
-      <SearchBox
-        namequeryHolder={namequeryHolder}
-        setnamequeryHolder={setnamequeryHolder}
-      />
+    <View>
       <FlatList
         ListFooterComponent={() => {
           return <View>{data.characters.info.next ? <Loading /> : null}</View>;
+        }}
+        ListHeaderComponent={() => {
+          return (
+            <SearchBox
+              namequeryHolder={namequeryHolder}
+              setnamequeryHolder={setnamequeryHolder}
+            />
+          );
         }}
         numColumns={3}
         keyboardShouldPersistTaps="always"

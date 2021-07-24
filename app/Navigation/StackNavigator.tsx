@@ -2,7 +2,7 @@ import React from 'react';
 import CharachterDetails from '../Screens/charachterDetails/CharachterDetails';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-import CharactersList from '../Screens/characterList/CharactersList';
+import characterListScreen from '../Screens/characterList/characterListScreen/characterListScreen';
 
 export default function StackNavigator() {
   const Stack = createStackNavigator();
@@ -22,7 +22,7 @@ export default function StackNavigator() {
             headerTintColor: 'white',
           }}
           name="CharacterList"
-          component={CharactersList}
+          component={characterListScreen}
         />
         <Stack.Screen
           options={{
