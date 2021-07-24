@@ -13,6 +13,27 @@ import {TextInput} from 'react-native-gesture-handler';
 export default function CharactersList() {
   const [namequeryHolder, setnamequeryHolder] = useState('');
   const [filtredData, setfiltredData] = useState([]);
+
+  async function filterCharacters(value) {
+    setnamequeryHolder(value);
+    if (value === '') {
+      setnamequeryHolder(value);
+    } else {
+      setnamequeryHolder(value);
+      try {
+        const response = await fetch(
+          'https://rickandmortyapi.com/api/character/?name=' + value,
+        );
+        const json = await response.json();
+        console.log(response);
+
+        setfiltredData(json.results);
+      } catch (error) {
+        console.log(error);
+        setfiltredData([]);
+      }
+    }
+  }
   const {loading, error, data, fetchMore} = useQuery(GET_CHARACHTERS, {
     variables: {
       charactersPage: 1,
@@ -30,68 +51,60 @@ export default function CharactersList() {
     <View
       style={{
         backgroundColor: '#223762',
+        height: '100%',
       }}>
-      <TextInput
-        value={namequeryHolder}
-        placeholder={'search by name'}
-        onChangeText={async value => {
-          setnamequeryHolder(value);
-          if (value === '') {
-            setnamequeryHolder(value);
-          } else {
-            setnamequeryHolder(value);
-            try {
-              const response = await fetch(
-                'https://rickandmortyapi.com/api/character/?name=' + value,
-              );
-              const json = await response.json();
-              console.log(response);
-
-              setfiltredData(json.results);
-            } catch (error) {
-              console.log(error);
-              setfiltredData([]);
+      <View
+        style={{
+          height: '10%',
+        }}>
+        <SearchBox
+          namequeryHolder={namequeryHolder}
+          setnamequeryHolder={setnamequeryHolder}
+          onSearchValueChange={filterCharacters}
+        />
+      </View>
+      <View
+        style={{
+          height: '90%',
+        }}>
+        <FlatList
+          ListFooterComponent={() => {
+            return (
+              <View>
+                {data.characters.info.next && namequeryHolder.length === 0 ? (
+                  <Loading />
+                ) : null}
+              </View>
+            );
+          }}
+          numColumns={3}
+          keyboardShouldPersistTaps="always"
+          onEndReachedThreshold={0.01}
+          onEndReached={() => {
+            if (namequeryHolder.length <= 0) {
+              loadMore(fetchMore, data, loading);
             }
+          }}
+          data={
+            namequeryHolder.length > 0 ? filtredData : data.characters.results
           }
-        }}
-      />
-      <FlatList
-        ListFooterComponent={() => {
-          return (
-            <View>
-              {data.characters.info.next && namequeryHolder.length === 0 ? (
-                <Loading />
-              ) : null}
-            </View>
-          );
-        }}
-        numColumns={3}
-        keyboardShouldPersistTaps="always"
-        onEndReachedThreshold={0.01}
-        onEndReached={() => {
-          if (namequeryHolder.length <= 0) {
-            loadMore(fetchMore, data, loading);
-          }
-        }}
-        data={
-          namequeryHolder.length > 0 ? filtredData : data.characters.results
-        }
-        renderItem={({item}) => {
-          return (
-            <CharachterCard
-              image={item.image}
-              id={item.id}
-              name={item.name}
-              // to be used in the second screen
-              moreInfo={{
-                species: item.species,
-                gender: item.gender,
-                episode: item.episode,
-              }}
-            />
-          );
-        }}
-      />
+          renderItem={({item}) => {
+            return (
+              <CharachterCard
+                image={item.image}
+                id={item.id}
+                name={item.name}
+                // to be used in the second screen
+                moreInfo={{
+                  species: item.species,
+                  gender: item.gender,
+                  episode: item.episode,
+                }}
+              />
+            );
+          }}
+        />
+      </View>
     </View>
   );
 }
