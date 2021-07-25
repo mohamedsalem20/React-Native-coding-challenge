@@ -10,54 +10,6 @@ export function loadMore(fetchMore, data, loading) {
   }
 }
 
-export const GET_CHARACHTERS = gql`
-  query Characters($charactersPage: Int, $charactersFilter: FilterCharacter) {
-    characters(page: $charactersPage, filter: $charactersFilter) {
-      results {
-        id
-        name
-        image
-        species
-        gender
-        episode {
-          name
-          air_date
-        }
-      }
-      info {
-        next
-        count
-      }
-    }
-  }
-`;
-
-export function FILTER_CHARACHTERSGQL(namequeryHolder: string) {
-  const FILTER_CHARACHTERS = gql`
-query {
-  characters(filter: {name: "${namequeryHolder}"}) {
-    results {
-      id
-      name
-      image
-      species
-      gender
-      episode{
-        name
-        air_date
-      }
-    }
-    info {
-      next
-      count
-    }
-  }
-}
-`;
-
-  return FILTER_CHARACHTERS;
-}
-
 export const cache = new InMemoryCache({
   typePolicies: {
     Query: {
@@ -94,3 +46,25 @@ export const client = new ApolloClient({
   uri: 'https://rickandmortyapi.com/graphql',
   cache,
 });
+
+export const GET_CHARACHTERS = gql`
+  query Characters($charactersPage: Int, $charactersFilter: FilterCharacter) {
+    characters(page: $charactersPage, filter: $charactersFilter) {
+      results {
+        id
+        name
+        image
+        species
+        gender
+        episode {
+          name
+          air_date
+        }
+      }
+      info {
+        next
+        count
+      }
+    }
+  }
+`;

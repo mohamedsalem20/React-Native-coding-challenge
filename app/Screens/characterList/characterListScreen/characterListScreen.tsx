@@ -12,7 +12,7 @@ export default function characterListScreen() {
       <SearchBox
         namequeryHolder={namequeryHolder}
         setnamequeryHolder={setnamequeryHolder}
-        onSearchValueChange={value => {
+        onSearchValueChange={(value): {value: any} => {
           setnamequeryHolder(value);
         }}
       />
