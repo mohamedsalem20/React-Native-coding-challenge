@@ -10,24 +10,21 @@ const CharachterDetails = ({route}: any) => {
   const name = route.params.name;
   const moreInfo = route.params.moreInfo;
 
+  interface episode {
+    name: string;
+    air_date: string[];
+  }
+
   return (
     <ScrollView style={styles.DetailsScreen}>
       <View>
         <Image source={{uri: image}} style={styles.CoverImage} blurRadius={3} />
         <View style={styles.proflieImageHolder}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'flex-end',
-            }}>
+          <View style={styles.DetailsV1}>
             <Image source={{uri: image}} style={styles.proflieImage} />
             <View>
               <Text style={styles.characterName}>{name}</Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginHorizontal: 5,
-                }}>
+              <View style={styles.detailsV2}>
                 <View>
                   <Text style={styles.speciesGender}>
                     {moreInfo.species}, {moreInfo.gender}
@@ -40,10 +37,10 @@ const CharachterDetails = ({route}: any) => {
       </View>
 
       {/* list of episodes */}
-      <View style={{marginTop: 100}}>
+      <View style={styles.episodsV}>
         <Text style={styles.episods}> {moreInfo.episode.length} Episodes </Text>
 
-        {moreInfo.episode.map(item => {
+        {moreInfo.episode.map((item: episode) => {
           return (
             <View key={item.name} style={styles.episodsList}>
               <View>

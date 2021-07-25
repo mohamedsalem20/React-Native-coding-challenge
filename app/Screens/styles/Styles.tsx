@@ -90,4 +90,22 @@ export const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#223762',
   },
+  DetailsV1: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  detailsV2: {
+    flexDirection: 'row',
+    marginHorizontal: 5,
+  },
+  episodsV: {
+    marginTop: 100,
+  },
+  ListofCharacters: {
+    backgroundColor: '#223762',
+    height: '100%',
+  },
+  listSize: {
+    height: '90%',
+  },
 });

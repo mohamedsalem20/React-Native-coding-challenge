@@ -8,6 +8,7 @@ import {CharachterCard} from './CharacterCard';
 import Error from './components/Error';
 import Loading from './components/Loading';
 import {useEffect} from 'react';
+import {styles} from '../styles/Styles';
 
 export default function CharactersList({namequeryHolder}) {
   useEffect(() => {
@@ -35,15 +36,8 @@ export default function CharactersList({namequeryHolder}) {
   }
 
   return (
-    <View
-      style={{
-        backgroundColor: '#223762',
-        height: '100%',
-      }}>
-      <View
-        style={{
-          height: '90%',
-        }}>
+    <View style={styles.ListofCharacters}>
+      <View style={styles.listSize}>
         <FlatList
           ListFooterComponent={() => {
             return (
