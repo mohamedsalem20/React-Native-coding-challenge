@@ -19,6 +19,9 @@ export function filterListByName(loading, fetchMore, namequeryHolder) {
   return false;
 }
 
-export function hasNext(data) {
-  return data.characters.info.next;
+export function hasNextPage(data: {characters: {info: {next: number}}}) {
+  if (data.characters.info.next) {
+    return true;
+  }
+  return false;
 }

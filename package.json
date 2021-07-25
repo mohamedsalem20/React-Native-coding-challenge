@@ -47,9 +47,6 @@
   },
   "jest": {
     "preset": "react-native",
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-cli|react-native/@jest/create-cache-key-function|react-native|jest-resolve|react-native-gesture-handler|scheduler|@react-native|rncodingchalleng|react-native-iphone-x-helper|@react-navigation|scheduler|react-test-renderer|apollo|@jest|jest-resolve)/)"
-    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",

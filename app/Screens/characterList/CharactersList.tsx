@@ -3,13 +3,13 @@ import React from 'react';
 import {useQuery} from '@apollo/client';
 import {FlatList} from 'react-native';
 import {View} from 'react-native';
-import {GET_CHARACHTERS, loadMore} from '../../GraphqlHelper';
+import {client, GET_CHARACHTERS, loadMore} from '../../GraphqlHelper';
 import {CharachterCard} from './CharacterCard';
 import Error from './components/Error';
 import Loading from './components/Loading';
 import {useEffect} from 'react';
 import {styles} from '../styles/Styles';
-import {filterListByName, hasNext} from '../../functions';
+import {filterListByName, hasNextPage} from '../../functions';
 
 export default function CharactersList({
   namequeryHolder,
@@ -21,6 +21,7 @@ export default function CharactersList({
       charactersPage: 1,
       charactersFilter: {name: namequeryHolder},
     },
+    client: client,
   });
   interface IItem {
     name: string;
@@ -29,10 +30,6 @@ export default function CharactersList({
     episode: [];
     species: string;
     id: number;
-  }
-
-  interface resultsProps {
-    results: [];
   }
 
   useEffect(() => {
@@ -54,7 +51,7 @@ export default function CharactersList({
           ListFooterComponent={() => {
             return (
               <View>
-                {hasNext(data) && namequeryHolder.length === 0 ? (
+                {hasNextPage(data) && namequeryHolder.length === 0 ? (
                   <Loading />
                 ) : null}
               </View>
