@@ -3,30 +3,24 @@ import React from 'react';
 import {useQuery} from '@apollo/client';
 import {FlatList} from 'react-native';
 import {View} from 'react-native';
-import {client, GET_CHARACHTERS, loadMore} from '../../GraphqlHelper';
+import {GET_CHARACHTERS, loadMore} from '../../GraphqlHelper';
 import {CharachterCard} from './CharacterCard';
 import Error from './components/Error';
 import Loading from './components/Loading';
 import {useEffect} from 'react';
 import {styles} from '../styles/Styles';
+import {filterListByName, hasNext} from '../../functions';
 
 export default function CharactersList({namequeryHolder}) {
-  useEffect(() => {
-    client.clearStore().then(() => {
-      fetchMore({
-        variables: {
-          charactersFilter: {name: namequeryHolder},
-        },
-      });
-    });
-  }, [namequeryHolder]);
-
   const {loading, error, data, fetchMore} = useQuery(GET_CHARACHTERS, {
     variables: {
       charactersPage: 1,
       charactersFilter: {name: namequeryHolder},
     },
   });
+  useEffect(() => {
+    filterListByName(loading, fetchMore, namequeryHolder);
+  }, [namequeryHolder]);
 
   if (loading) {
     return <Loading />;
@@ -34,7 +28,6 @@ export default function CharactersList({namequeryHolder}) {
   if (error) {
     return <Error />;
   }
-
   return (
     <View style={styles.ListofCharacters}>
       <View style={styles.listSize}>
@@ -42,7 +35,7 @@ export default function CharactersList({namequeryHolder}) {
           ListFooterComponent={() => {
             return (
               <View>
-                {data.characters.info.next && namequeryHolder.length === 0 ? (
+                {hasNext(data) && namequeryHolder.length === 0 ? (
                   <Loading />
                 ) : null}
               </View>
@@ -58,6 +51,7 @@ export default function CharactersList({namequeryHolder}) {
             }
           }}
           data={data?.characters?.results}
+          keyExtractor={(index: number) => (index + Math.random()).toString()}
           renderItem={({item}) => {
             return (
               <CharachterCard
