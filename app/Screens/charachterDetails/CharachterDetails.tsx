@@ -3,8 +3,7 @@ import {Image, View, Text, ScrollView} from 'react-native';
 import {styles} from '../styles/Styles';
 
 interface episode {
-  name: string;
-  air_date: string[];
+  episode: [{name: string; air_date: string}];
 }
 const CharachterDetails = ({
   route,
@@ -13,7 +12,11 @@ const CharachterDetails = ({
     params: {
       image: string;
       name: string;
-      moreInfo: [episode];
+      moreInfo: {
+        episode: [{name: string; air_date: string}];
+        species: string;
+        gender: string;
+      };
     };
   };
 }) => {
@@ -46,7 +49,7 @@ const CharachterDetails = ({
       <View style={styles.episodsV}>
         <Text style={styles.episods}> {moreInfo.episode.length} Episodes </Text>
 
-        {moreInfo.episode.map((item: episode) => {
+        {moreInfo.episode.map(item => {
           return (
             <View key={item.name} style={styles.episodsList}>
               <View>
