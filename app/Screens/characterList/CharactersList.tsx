@@ -11,13 +11,30 @@ import {useEffect} from 'react';
 import {styles} from '../styles/Styles';
 import {filterListByName, hasNext} from '../../functions';
 
-export default function CharactersList({namequeryHolder}) {
+export default function CharactersList({
+  namequeryHolder,
+}: {
+  namequeryHolder: string;
+}) {
   const {loading, error, data, fetchMore} = useQuery(GET_CHARACHTERS, {
     variables: {
       charactersPage: 1,
       charactersFilter: {name: namequeryHolder},
     },
   });
+  interface IItem {
+    name: string;
+    image: string;
+    gender: string;
+    episode: [];
+    species: string;
+    id: number;
+  }
+
+  interface resultsProps {
+    results: [];
+  }
+
   useEffect(() => {
     filterListByName(loading, fetchMore, namequeryHolder);
   }, [namequeryHolder]);
@@ -28,6 +45,8 @@ export default function CharactersList({namequeryHolder}) {
   if (error) {
     return <Error />;
   }
+
+  const results = data?.characters?.results;
   return (
     <View style={styles.ListofCharacters}>
       <View style={styles.listSize}>
@@ -50,9 +69,9 @@ export default function CharactersList({namequeryHolder}) {
               loadMore(fetchMore, data, loading);
             }
           }}
-          data={data?.characters?.results}
+          data={results}
           keyExtractor={(index: number) => (index + Math.random()).toString()}
-          renderItem={({item}) => {
+          renderItem={({item}: {item: IItem}) => {
             return (
               <CharachterCard
                 image={item.image}

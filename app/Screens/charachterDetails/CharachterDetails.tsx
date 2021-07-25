@@ -1,8 +1,5 @@
 import React from 'react';
-import {Image} from 'react-native';
-import {View} from 'react-native';
-import {Text} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {Image, View, Text, ScrollView} from 'react-native';
 import {styles} from '../styles/Styles';
 
 const CharachterDetails = ({route}: any) => {

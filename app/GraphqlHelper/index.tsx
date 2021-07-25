@@ -1,4 +1,5 @@
-import {ApolloClient, gql, InMemoryCache} from '@apollo/client';
+import {ApolloClient, createHttpLink, gql, InMemoryCache} from '@apollo/client';
+import fetch from 'node-fetch';
 
 export function loadMore(fetchMore, data, loading) {
   if (data.characters.info.next && !loading) {
@@ -43,7 +44,11 @@ export const cache = new InMemoryCache({
 
 // Initialize Apollo Client
 export const client = new ApolloClient({
-  uri: 'https://rickandmortyapi.com/graphql',
+  // uri: 'https://rickandmortyapi.com/graphql',
+  link: createHttpLink({
+    uri: 'https://rickandmortyapi.com/graphql',
+    fetch: fetch,
+  }),
   cache,
 });
 
