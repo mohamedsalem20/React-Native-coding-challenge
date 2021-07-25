@@ -2,15 +2,24 @@ import React from 'react';
 import {Image, View, Text, ScrollView} from 'react-native';
 import {styles} from '../styles/Styles';
 
-const CharachterDetails = ({route}: any) => {
+interface episode {
+  name: string;
+  air_date: string[];
+}
+const CharachterDetails = ({
+  route,
+}: {
+  route: {
+    params: {
+      image: string;
+      name: string;
+      moreInfo: [episode];
+    };
+  };
+}) => {
   const image = route.params.image;
   const name = route.params.name;
   const moreInfo = route.params.moreInfo;
-
-  interface episode {
-    name: string;
-    air_date: string[];
-  }
 
   return (
     <ScrollView style={styles.DetailsScreen}>
