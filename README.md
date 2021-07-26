@@ -49,4 +49,8 @@ $ npm run android
 $ npm run ios
 ```
 
-Note : the app has been tested on Android 8
+unit testing located in **tests**/App-test.tsx
+
+```
+$ npm test
+```
