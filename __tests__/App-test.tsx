@@ -5,14 +5,8 @@ import renderer from 'react-test-renderer';
 import {hasNextPage} from '../app/functions';
 import CharachterDetails from '../app/Screens/charachterDetails/CharachterDetails';
 import CharacterCard from '../app/Screens/characterList/CharacterCard';
-import CharactersList from '../app/Screens/characterList/CharactersList';
-
-import TestRenderer from 'react-test-renderer';
-import {MockedProvider} from '@apollo/client/testing';
 import Loading from '../app/Screens/characterList/components/Loading';
 import Error from '../app/Screens/characterList/components/Error';
-import {mocks} from './mocks';
-import StackNavigator from '../app/Navigation/StackNavigator';
 
 it('render CharachterDetails correctly ✅', () => {
   renderer.create(
