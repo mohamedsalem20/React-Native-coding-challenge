@@ -1,3 +1,14 @@
+<h1 align="center">
+  <img src="https://images6.alphacoders.com/909/thumb-1920-909641.png" width="100"><br>
+  <a href="github.com/ahnafalfariza/moviesdaily" style="color: black"><span>React Native coding challenge</span></a><br>
+</h1>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/react-16.13-green.svg" />
+  <img src="https://img.shields.io/badge/react--native-0.63-blue.svg" />
+  <img src="https://img.shields.io/badge/license-MIT-red" />
+</p>
+
 ## React Native coding challenge
 
 This coding challenge is about creating a small react native application using Rick and Morty
@@ -54,3 +65,7 @@ unit testing located in **tests**/App-test.tsx
 ```
 $ npm test
 ```
+
+## License
+
+Project is published under the [MIT license](/LICENSE).
