@@ -4,7 +4,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import {hasNextPage} from '../app/functions';
 import CharachterDetails from '../app/Screens/charachterDetails/CharachterDetails';
-import CharactersList from '../app/Screens/characterList/CharactersList';
+import CharacterCard from '../app/Screens/characterList/CharacterCard';
 
 it('render CharachterDetails correctly ✅', () => {
   renderer.create(
@@ -30,4 +30,19 @@ it('render CharachterDetails correctly ✅', () => {
 
 it('given if still charachters to fetch (for pagination), hasNextPage() returns true', () => {
   expect(hasNextPage({characters: {info: {next: 2}}})).toBe(true);
+});
+
+it('render CharachterCard correctly ', () => {
+  renderer.create(
+    <CharacterCard
+      image="test"
+      name="test"
+      id={1}
+      moreInfo={{
+        species: 'test',
+        gender: 'test',
+        episode: [{air_date: 'test', name: 'test'}],
+      }}
+    />,
+  );
 });

@@ -5,18 +5,23 @@ import React from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from '../styles/Styles';
 
-export const CharachterCard = ({
+const CharachterCard = ({
   image,
   name,
   id,
   moreInfo,
+  navigation,
 }: {
   image: string;
   name: string;
   id: number;
-  moreInfo: object;
+  moreInfo: {
+    episode: [{name: string; air_date: string}];
+    species: string;
+    gender: string;
+  };
+  navigation: object;
 }) => {
-  const navigation = useNavigation();
   // on selct Charachter
   function onSelectCharachter({
     image,
@@ -49,3 +54,5 @@ export const CharachterCard = ({
     </TouchableOpacity>
   );
 };
+
+export default CharachterCard;

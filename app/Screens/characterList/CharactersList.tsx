@@ -4,7 +4,7 @@ import {useQuery} from '@apollo/client';
 import {FlatList} from 'react-native';
 import {View} from 'react-native';
 import {client, GET_CHARACHTERS, loadMore} from '../../GraphqlHelper';
-import {CharachterCard} from './CharacterCard';
+import CharachterCard from './CharacterCard';
 import Error from './components/Error';
 import Loading from './components/Loading';
 import {useEffect} from 'react';
@@ -13,8 +13,10 @@ import {filterListByName, hasNextPage} from '../../functions';
 
 export default function CharactersList({
   namequeryHolder,
+  navigation,
 }: {
   namequeryHolder: string;
+  navigation: object;
 }) {
   const {loading, error, data, fetchMore} = useQuery(GET_CHARACHTERS, {
     variables: {
@@ -24,12 +26,13 @@ export default function CharactersList({
     client: client,
   });
   interface IItem {
-    name: string;
     image: string;
-    gender: string;
-    episode: [];
-    species: string;
     id: number;
+    name: string;
+    episode: [{name: string; air_date: string}];
+    species: string;
+    gender: string;
+    navigation: object;
   }
 
   useEffect(() => {
@@ -76,10 +79,11 @@ export default function CharactersList({
                 name={item.name}
                 // to use in the second screen
                 moreInfo={{
+                  episode: item.episode,
                   species: item.species,
                   gender: item.gender,
-                  episode: item.episode,
                 }}
+                navigation={navigation}
               />
             );
           }}

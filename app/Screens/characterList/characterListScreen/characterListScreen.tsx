@@ -5,7 +5,7 @@ import {styles} from '../../styles/Styles';
 import CharactersList from '../CharactersList';
 import {SearchBox} from '../components/SearchBox';
 
-export default function characterListScreen() {
+export default function characterListScreen({navigation}: {navigation: any}) {
   const [namequeryHolder, setnamequeryHolder] = useState('');
   return (
     <View style={styles.characterListScreen}>
@@ -16,7 +16,10 @@ export default function characterListScreen() {
           setnamequeryHolder(value);
         }}
       />
-      <CharactersList namequeryHolder={namequeryHolder} />
+      <CharactersList
+        navigation={navigation}
+        namequeryHolder={namequeryHolder}
+      />
     </View>
   );
 }
