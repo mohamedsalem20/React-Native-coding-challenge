@@ -5,6 +5,14 @@ import renderer from 'react-test-renderer';
 import {hasNextPage} from '../app/functions';
 import CharachterDetails from '../app/Screens/charachterDetails/CharachterDetails';
 import CharacterCard from '../app/Screens/characterList/CharacterCard';
+import CharactersList from '../app/Screens/characterList/CharactersList';
+
+import TestRenderer from 'react-test-renderer';
+import {MockedProvider} from '@apollo/client/testing';
+import Loading from '../app/Screens/characterList/components/Loading';
+import Error from '../app/Screens/characterList/components/Error';
+import {mocks} from './mocks';
+import StackNavigator from '../app/Navigation/StackNavigator';
 
 it('render CharachterDetails correctly ✅', () => {
   renderer.create(
@@ -28,7 +36,7 @@ it('render CharachterDetails correctly ✅', () => {
 //   renderer.create(<CharactersList namequeryHolder={'mark'} />);
 // });
 
-it('given if still charachters to fetch (for pagination), hasNextPage() returns true', () => {
+it('check if still charachters to fetch (for pagination), hasNextPage(2) returns true', () => {
   expect(hasNextPage({characters: {info: {next: 2}}})).toBe(true);
 });
 
@@ -43,6 +51,15 @@ it('render CharachterCard correctly ', () => {
         gender: 'test',
         episode: [{air_date: 'test', name: 'test'}],
       }}
+      navigation={{}}
     />,
   );
+});
+
+it('render Loading component correctly ', () => {
+  renderer.create(<Loading />);
+});
+
+it('render Error component correctly ', () => {
+  renderer.create(<Error />);
 });

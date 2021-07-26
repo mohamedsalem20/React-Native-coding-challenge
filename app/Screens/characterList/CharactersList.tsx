@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {useQuery} from '@apollo/client';
-import {FlatList} from 'react-native';
+import {FlatList, Text} from 'react-native';
 import {View} from 'react-native';
 import {client, GET_CHARACHTERS, loadMore} from '../../GraphqlHelper';
 import CharachterCard from './CharacterCard';
@@ -37,6 +37,7 @@ export default function CharactersList({
 
   useEffect(() => {
     filterListByName(loading, fetchMore, namequeryHolder);
+    console.log(JSON.stringify(data));
   }, [namequeryHolder]);
 
   if (loading) {
@@ -45,50 +46,5 @@ export default function CharactersList({
   if (error) {
     return <Error />;
   }
-
-  const results = data?.characters?.results;
-  return (
-    <View style={styles.ListofCharacters}>
-      <View style={styles.listSize}>
-        <FlatList
-          ListFooterComponent={() => {
-            return (
-              <View>
-                {hasNextPage(data) && namequeryHolder.length === 0 ? (
-                  <Loading />
-                ) : null}
-              </View>
-            );
-          }}
-          numColumns={3}
-          keyboardShouldPersistTaps="always"
-          onEndReachedThreshold={0.01}
-          onEndReached={() => {
-            // get next list ( pagination with auto merge in cache)
-            if (namequeryHolder.length <= 0) {
-              loadMore(fetchMore, data, loading);
-            }
-          }}
-          data={results}
-          keyExtractor={(index: number) => (index + Math.random()).toString()}
-          renderItem={({item}: {item: IItem}) => {
-            return (
-              <CharachterCard
-                image={item.image}
-                id={item.id}
-                name={item.name}
-                // to use in the second screen
-                moreInfo={{
-                  episode: item.episode,
-                  species: item.species,
-                  gender: item.gender,
-                }}
-                navigation={navigation}
-              />
-            );
-          }}
-        />
-      </View>
-    </View>
-  );
+  return <Text>hi</Text>;
 }
